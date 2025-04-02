@@ -1,23 +1,76 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-.heroBanner {
-  padding: 4rem 0;
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, #e7dbff, #cfe1ff);
+  padding: 2rem;
   text-align: center;
-  position: relative;
-  overflow: hidden;
+  height: 100dvh;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.avatar {
+  width: 240px;      
+  height: auto;      
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.desc {
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
 .buttons {
   display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 300px; 
+}
+
+.btn {
+  width: 100%; 
+  display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  background-color: #fff;
+  color: #111;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-size: 1rem;
+}
+
+.btn:hover {
+  background-color: #f0f0f0;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+.link {
+  color: #5b3cc4;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #372174;
+  text-decoration: underline;
 }
