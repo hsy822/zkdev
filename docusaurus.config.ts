@@ -79,7 +79,13 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Remix IDE Plugin',
+          label: 'Aztec Remix Plugin',
+        },
+        {
+          type: 'doc',
+          docId: 'authwit',
+          position: 'left',
+          label: 'Tutorials',
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
         // {

@@ -47,6 +47,18 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Tutorials',
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          id: 'authwit', // authwit.md
+          label: 'Using AuthWitness',
+        },
+      ],
+    },
   ],
 };
 
