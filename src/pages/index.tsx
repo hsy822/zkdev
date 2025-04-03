@@ -15,7 +15,7 @@ export default function HomepageHeader() {
     <Layout title="zkdev" description="Privacy-first zk developer portal">
       <main className={styles.main}>
         <img className={styles.avatar} src="/img/profile.jpg" alt="avatar" />
-        <h1 className={styles.name}>Sooyoung Hyun</h1>
+        <h1 className={styles.name} >Sooyoung Hyun</h1>
         <p className={styles.desc}>
           Contributor & Home Staker at{' '}
           <a href="https://x.com/aztecnetwork" target="_blank" className={styles.link}>
