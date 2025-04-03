@@ -25,7 +25,7 @@ In this tutorial, we will learn exactly how it works through a hands-on walkthro
 
 ---
 
-## 🛠️ Using AuthWit with the Aztec Remix Plugin
+## Using AuthWit with the Aztec Remix Plugin
 
 In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a **Noir-based Token contract using AuthWit**, and simulate a real-world flow where multiple accounts interact with the contract using **authentication witnesses (AuthWit)**.
 

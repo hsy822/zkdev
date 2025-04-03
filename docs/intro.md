@@ -35,7 +35,7 @@ Explore the following sections to start building with Aztec in Remix:
 
 ---
 
-## 📦 GitHub Repository
+## GitHub Repository
 
 You can find the source code, raise issues, or contribute via GitHub:
 
