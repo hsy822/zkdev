@@ -105,7 +105,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
     <img src="/img/authwit/4-1.png" alt="screenshot" width="300" />
 
 2. Call `transfer_in_private(Account 1 → Account 2, 100, 123)` again.
-3. Set `useAuthWit: true` and choose `1to2.txt` from the dropdown.
+3. Set `useAuthWit: true` and choose `atob.txt` from the dropdown.
 4. Submit the transaction → It should now **succeed**.
 
     <img src="/img/authwit/4-2.png" alt="screenshot" width="700" />
