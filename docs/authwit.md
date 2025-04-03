@@ -3,7 +3,7 @@ id: authwit
 title: Using AuthWitness
 ---
 
-## 🔐 What is an Authentication Witness (AuthWit)?
+## What is an Authentication Witness (AuthWit)?
 
 Authentication Witness, or **AuthWit**, is Aztec's solution for securely authorizing third parties (like other users or protocols) to perform specific actions on your behalf — without relying on unlimited token approvals or opaque signature mechanisms.
 
@@ -11,7 +11,7 @@ This concept stems from the need to improve user safety, transparency, and smart
 
 AuthWits work by having the user generate a **witness (proof)** that authorizes a specific action. This witness is then passed along with a contract call, either in **private** (executed client-side through PXE) or **public** (stored on-chain via account contracts).
 
-### ✅ Key Benefits
+### Key Benefits
 
 - **Explicit Authorization:** Users define *exactly* what is allowed — which function, what parameters, and who can call it.
 - **Single Transaction:** No need for an approval-then-action flow; it's all done at once.
@@ -35,7 +35,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-### 📦 Step 1. Compile & Deploy the Contract
+### Step 1. Compile & Deploy the Contract
 
 1. Open `Token.nr` in the Aztec Remix plugin and compile it.
 2. Once compiled, check the generated `.json` artifact and deploy the contract using **`Account 1`**.
@@ -48,7 +48,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-### 🧪 Step 2. Try `transfer_in_private` without AuthWit → Fail
+### Step 2. Try `transfer_in_private` without AuthWit → Fail
 
 1. Switch to `Account 1` and call `mint_to_private(from, to, amount)` to mint 1000 tokens.
 
@@ -77,7 +77,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-### 🔐 Step 3. Generate AuthWit
+### Step 3. Generate AuthWit
 
 1. Switch back to `Account 1`.
 
@@ -98,7 +98,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-### ✅ Step 4. Call the Function with AuthWit → Success
+### Step 4. Call the Function with AuthWit → Success
 
 1. Switch to `Account 2`.
 
@@ -112,7 +112,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-### 🌍 Step 5. Register AuthWit for Public Functions (On-chain)
+### Step 5. Register AuthWit for Public Functions (On-chain)
 
 1. For public functions like `transfer_in_public`, you must **register the AuthWit on-chain** before use.
 2. From `Account 1`, call `setPublicAuthWit(...)` with:
@@ -127,7 +127,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-### 🧹 Final Thoughts
+### Final Thoughts
 
 - In this tutorial, we walked through a full cycle of using **AuthWit**:
   - From a failed private transfer due to missing AuthWit,
@@ -138,7 +138,7 @@ In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a *
 
 ---
 
-## 📖 References
+## References
 
 - [Advenced Concepts - Authentication Witness (Authwit)](https://docs.aztec.network/aztec/concepts/advanced/authwit)
 - [Writing Contracts - Authentication Witness](https://docs.aztec.network/developers/guides/smart_contracts/writing_contracts/authwit)

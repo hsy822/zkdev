@@ -4,7 +4,7 @@ This guide walks you through the steps to connect the plugin, compile Noir proje
 
 ---
 
-## 🔌 Connect
+## Connect
 
 Click the **"Connect to Aztec Sandbox"** button in the **Environment** section.  
 This connects to your locally running Aztec Sandbox and automatically imports the three default accounts.
@@ -15,7 +15,7 @@ This connects to your locally running Aztec Sandbox and automatically imports th
 
 ---
 
-## 🛠️ Compile
+## Compile
 Your project must follow the structure below under the aztec/ directory:
 
 ```bash
@@ -40,7 +40,7 @@ To compile:
 
 ---
 
-## 📦 Deploy
+## Deploy
 
 After successful compilation:
 
@@ -54,7 +54,7 @@ Once deployed, the contract address will be saved for use in the Interact sectio
 
 ---
 
-## 🔁 Interact
+## Interact
 
 All deployed contracts are listed under **Contract Instance** in the **Interact** section.
 
@@ -74,4 +74,4 @@ Once connected:
   - **Simulate** for read-only functions
   - **Send** to execute write functions
 
-> 🔐 For private functions requiring `AuthWitness`, refer to the [AuthWit tutorial](#).
+> For private functions requiring `AuthWitness`, refer to the [AuthWit tutorial](/docs/authwit).
