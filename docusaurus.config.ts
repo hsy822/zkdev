@@ -72,29 +72,24 @@ const config: Config = {
       title: 'zkDev',
       logo: {
         alt: 'zkDev Logo',
-        src: 'img/logo-light.png'
+        src: 'img/logo-light.png',
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'remixSidebar', // ✅ 새 sidebar ID
           position: 'left',
           label: 'Aztec Remix Plugin',
         },
         {
-          type: 'doc',
-          docId: 'authwit',
+          type: 'docSidebar',
+          sidebarId: 'tutorialsSidebar', // ✅ Tutorials용 sidebar
           position: 'left',
           label: 'Tutorials',
         },
-        // {to: '/blog', label: 'Blog', position: 'left'},
-        // {
-        //   href: 'https://github.com/facebook/docusaurus',
-        //   label: 'GitHub',
-        //   position: 'right',
-        // },
       ],
     },
+    
     // footer: {
     //   style: 'dark',
     //   links: [
