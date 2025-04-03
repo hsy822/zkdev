@@ -30,8 +30,8 @@ In this tutorial, we will learn exactly how it works through a hands-on walkthro
 In this tutorial, we'll use the **Aztec Remix plugin** to compile and deploy a **Noir-based Token contract using AuthWit**, and simulate a real-world flow where multiple accounts interact with the contract using **authentication witnesses (AuthWit)**.
 
 👉 For connection and usage of the plugin, refer to the following docs:  
-- [Connect](https://zkdev.net/docs/connect)
-- [Usage](https://zkdev.net/docs/usage)
+- [Connect](/docs/connect)
+- [Usage](/docs/usage)
 
 ---
 
