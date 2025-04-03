@@ -65,6 +65,10 @@ const config: Config = {
   ],
 
   themeConfig: {
+    gtag: {
+      trackingID: 'G-SE99XHREQX',
+      anonymizeIP: true,
+    },
     colorMode: {
       disableSwitch: true,
     },
