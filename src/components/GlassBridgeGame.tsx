@@ -1,21 +1,25 @@
+// src/components/GlassBridgeGame.tsx
 import React, { useEffect, useState } from 'react';
 
 export default function GlassBridgeGame() {
-  const [showIframe, setShowIframe] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setShowIframe(true); 
+    setMounted(true);
   }, []);
 
+  if (!mounted) return null;
+
   return (
-    showIframe ? (
-      <iframe
-        src="/games/glass-bridge/index.html"
-        width="100%"
-        height="600"
-        style={{ border: '1px solid #ccc', borderRadius: '8px' }}
-        allow="clipboard-write"
-      />
-    ) : null
+    <iframe
+      src="/games/glass-bridge/index.html"
+      width="100%"
+      height="600"
+      style={{
+        border: '1px solid #ccc',
+        borderRadius: '8px'
+      }}
+      allow="clipboard-write"
+    />
   );
 }
