@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function GlassBridgeGame() {
-  if (typeof window === 'undefined') return null;
+  const [showIframe, setShowIframe] = useState(false);
+
+  useEffect(() => {
+    setShowIframe(true); 
+  }, []);
 
   return (
-    <iframe
-      src="/games/glass-bridge/index.html"
-      width="100%"
-      height="600"
-      style={{
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-      }}
-      allow="clipboard-write"
-      loading="lazy"
-    />
+    showIframe ? (
+      <iframe
+        src="/games/glass-bridge/index.html"
+        width="100%"
+        height="600"
+        style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+        allow="clipboard-write"
+      />
+    ) : null
   );
 }
