@@ -6,7 +6,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Aztec Remix Plugin',
       collapsed: false,
-      items: ['intro', 'connect', 'usage'],
+      items: ['remix/intro', 'remix/connect', 'remix/usage'],
     },
   ],
   tutorialsSidebar: [
@@ -14,7 +14,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Tutorials',
       collapsed: false,
-      items: ['authwit'],
+      items: ['tutorial/authwit', 'tutorial/glass-bridge'],
     },
   ],
 };

@@ -81,13 +81,13 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'remixSidebar', // ✅ 새 sidebar ID
+          sidebarId: 'remixSidebar', 
           position: 'left',
           label: 'Aztec Remix Plugin',
         },
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialsSidebar', // ✅ Tutorials용 sidebar
+          sidebarId: 'tutorialsSidebar', 
           position: 'left',
           label: 'Tutorials',
         },
