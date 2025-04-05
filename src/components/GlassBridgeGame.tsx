@@ -13,6 +13,7 @@ export default function GlassBridgeGame() {
         borderRadius: '8px',
       }}
       allow="clipboard-write"
+      loading="lazy"
     />
   );
 }
