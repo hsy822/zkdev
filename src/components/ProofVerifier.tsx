@@ -13,7 +13,7 @@ export default function ProofVerifier() {
     const init = async () => {
         const [{ UltraPlonkBackend }, circuitJson] = await Promise.all([
           import('@aztec/bb.js'),
-          fetch('/circuits/main.json').then((res) => res.json()),
+          fetch('/circuits/circuit.json').then((res) => res.json()),
         ]);
   
         const backend = new UltraPlonkBackend(circuitJson);
@@ -27,7 +27,7 @@ export default function ProofVerifier() {
   }, []);
 
   if (!ready) return <div>Loading Noir verifier...</div>;
-  
+
   const hexToBytes = (hex: string): Uint8Array => {
     if (hex.startsWith('0x')) hex = hex.slice(2);
     const bytes = new Uint8Array(hex.length / 2);
