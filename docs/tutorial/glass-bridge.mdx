@@ -3,7 +3,7 @@ id: glass-bridge
 title: Glass Bridge With Noir
 ---
 
-import GlassBridgeWrapper from '@site/src/components/GlassBridgeGameWrapper';
+import GlassBridgeGame from '@site/src/components/GlassBridgeGame';
 import ProofVerifierWrapper from '@site/src/components/ProofVerifierWrapper';
 
 # Glass Bridge With Noir
@@ -56,7 +56,7 @@ This is the essence of Zero-Knowledge Proofs:
 💡 All proofs are generated **locally in the browser** and are never exposed.
 
 
-<GlassBridgeWrapper />
+<GlassBridgeGame />
 
 ## 4. If You Make It Across...
 
@@ -92,9 +92,7 @@ The verifier does **not** know the correct path but can still confirm the proof 
 ```js
 const verified = await backend.verifyProof({ proof: proofBytes, publicInputs });
 ```
-
 <ProofVerifierWrapper />
-
 💡 If verification succeeds, it proves the player truly followed the correct path — **without revealing what it was**!
 
 ---
