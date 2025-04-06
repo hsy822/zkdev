@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UltraHonkBackend } from '@aztec/bb.js';
 
 export default function ProofVerifier() {
@@ -38,6 +38,14 @@ export default function ProofVerifier() {
       setVerifying(false);
     }
   };
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div style={{
