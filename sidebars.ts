@@ -17,12 +17,12 @@ const sidebars: SidebarsConfig = {
       items: ['tutorial/authwit', 'tutorial/glass-bridge'],
     },
   ],
-  nodeSidebar: [
+  stakingSidebar: [
     {
       type: 'category',
-      label: 'Aztec Node Diary',
+      label: 'Staking Log',
       collapsed: false,
-      items: ['node/node-diary'],
+      items: ['node/staking-log'],
     },
   ],
 };

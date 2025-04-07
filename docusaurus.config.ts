@@ -93,9 +93,9 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'nodeSidebar', 
+          sidebarId: 'stakingSidebar', 
           position: 'left',
-          label: 'Aztec Node Diary',
+          label: 'Staking Log',
         },
       ],
     },
