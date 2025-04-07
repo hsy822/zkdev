@@ -17,6 +17,14 @@ const sidebars: SidebarsConfig = {
       items: ['tutorial/authwit', 'tutorial/glass-bridge'],
     },
   ],
+  nodeSidebar: [
+    {
+      type: 'category',
+      label: 'Aztec Node Diary',
+      collapsed: false,
+      items: ['node/node-diary'],
+    },
+  ],
 };
 
 export default sidebars;

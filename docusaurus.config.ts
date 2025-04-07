@@ -91,6 +91,12 @@ const config: Config = {
           position: 'left',
           label: 'Tutorials',
         },
+        {
+          type: 'docSidebar',
+          sidebarId: 'nodeSidebar', 
+          position: 'left',
+          label: 'Aztec Node Diary',
+        },
       ],
     },
     
