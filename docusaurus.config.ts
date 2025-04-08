@@ -4,6 +4,9 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+import webpack from 'webpack';
+import path from 'path';
+
 const config: Config = {
   title: 'zkDev',
   tagline: 'Dinosaurs are cool',
@@ -93,10 +96,17 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
+          sidebarId: 'boardSidebar', 
+          position: 'left',
+          label: 'Dashboard',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'stakingSidebar', 
           position: 'left',
           label: 'Staking Log',
         },
+        
       ],
     },
     
@@ -151,5 +161,35 @@ const config: Config = {
     },
   } satisfies Preset.ThemeConfig,
 };
+
+config.plugins = [
+  function webpackConfigPlugin() {
+    return {
+      name: 'custom-webpack-config',
+      configureWebpack() {
+        return {
+          resolve: {
+            fallback: {
+              util: require.resolve('util/'),
+              crypto: require.resolve('crypto-browserify'),
+              stream: require.resolve('stream-browserify'),
+              buffer: require.resolve('buffer/'),
+              process: require.resolve('process/browser.js'),
+              assert: require.resolve('assert/'),
+              path: require.resolve('path-browserify'),
+              tty: require.resolve('tty-browserify'),
+            },
+          },
+          plugins: [
+            new webpack.ProvidePlugin({
+              Buffer: ['buffer', 'Buffer'],
+              process: 'process/browser.js',
+            }),
+          ],
+        };
+      },
+    };
+  },
+];
 
 export default config;

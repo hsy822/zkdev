@@ -17,6 +17,14 @@ const sidebars: SidebarsConfig = {
       items: ['tutorial/authwit', 'tutorial/glass-bridge'],
     },
   ],
+  boardSidebar: [
+    {
+      type: 'category',
+      label: 'Dashboard',
+      collapsed: false,
+      items: ['dashboard/PXE'],
+    },
+  ],
   stakingSidebar: [
     {
       type: 'category',
