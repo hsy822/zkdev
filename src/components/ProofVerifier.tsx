@@ -43,7 +43,7 @@ export default function ProofVerifier() {
       const proofBytes = hexToBytes(proofInput.trim());
       const publicInputs = [publicHash.trim()];
 
-      const verified = await backend.verifyProof({ proof: proofBytes, publicInputs });
+      const verified = await backend.verifyProof({ proof: proofBytes, publicInputs }, {keccak: true});
 
       setResult(verified ? '✅ Valid proof!' : '❌ Invalid proof.');
     } catch (e) {

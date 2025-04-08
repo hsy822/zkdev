@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@aztec/aztec.js": "^0.84.0",
-    "@aztec/bb.js": "0.72.1",
+    "@aztec/bb.js": "0.82.2",
     "@docusaurus/core": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
     "@mdx-js/react": "^3.0.0",
