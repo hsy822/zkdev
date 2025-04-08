@@ -6,7 +6,7 @@ export default function PxeDashboard() {
   const [status, setStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle');
   const [pxeInfo, setPxeInfo] = useState<any>({});
   const [logs, setLogs] = useState<any[]>([]);
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(true);
 
   const connectToPXE = async () => {
     setStatus('connecting');
