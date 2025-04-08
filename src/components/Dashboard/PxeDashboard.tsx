@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPXEClient } from '@aztec/aztec.js';
 import NoteExplorerSection from './NoteExplorerSection';
 
@@ -6,23 +6,30 @@ export default function PxeDashboard() {
   const [status, setStatus] = useState<'idle' | 'connecting' | 'connected' | 'error'>('idle');
   const [pxeInfo, setPxeInfo] = useState<any>({});
   const [logs, setLogs] = useState<any[]>([]);
+  const [ready, setReady] = useState(false);
 
-  const connectToPXE = async () => {
-    setStatus('connecting');
-    try {
-      const pxe = await createPXEClient('http://localhost:8080');
-      const blockNumber = await pxe.getBlockNumber();
-      const info = await pxe.getPXEInfo();
-      const publicLogs = await pxe.getPublicLogs({ fromBlock: 0, toBlock: blockNumber });
+  useEffect(() => {
+    const connectToPXE = async () => {
+      setStatus('connecting');
+      try {
+        const pxe = await createPXEClient('http://localhost:8080');
+        const blockNumber = await pxe.getBlockNumber();
+        const info = await pxe.getPXEInfo();
+        const publicLogs = await pxe.getPublicLogs({ fromBlock: 0, toBlock: blockNumber });
+  
+        setPxeInfo(info);
+        setLogs(publicLogs.logs ?? []);
+        setStatus('connected');
+        setReady(true);
+      } catch (e) {
+        console.error(e);
+        setStatus('error');
+      }
+    };
+    connectToPXE()
+  }, []);
 
-      setPxeInfo(info);
-      setLogs(publicLogs.logs ?? []);
-      setStatus('connected');
-    } catch (e) {
-      console.error(e);
-      setStatus('error');
-    }
-  };
+  if (!ready) return <div style={{ textAlign: 'center' }}>🕓 Loading PXE dashboard...</div>;
 
   const sectionStyle = {
     backgroundColor: '#f9f9f9',

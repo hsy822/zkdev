@@ -8,13 +8,15 @@ export default function NoteExplorerSection() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchAccounts = async () => {
-      const pxe = await createPXEClient('http://localhost:8080');
-      const registered = await pxe.getRegisteredAccounts();
-      setAccounts(registered.map((a) => a.address));
-    };
-    fetchAccounts();
-  }, []);
+		if (typeof window !== 'undefined') {
+			const fetchAccounts = async () => {
+				const pxe = await createPXEClient('http://localhost:8080');
+				const registered = await pxe.getRegisteredAccounts();
+				setAccounts(registered.map((a) => a.address));
+			};
+			fetchAccounts();
+		}
+	}, []);	
 
   const fetchNotes = async (addr: AztecAddress) => {
     setLoading(true);

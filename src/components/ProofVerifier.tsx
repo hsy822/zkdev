@@ -11,17 +11,17 @@ export default function ProofVerifier() {
 
   useEffect(() => {
     const init = async () => {
-        const [{ UltraHonkBackend } ] = await Promise.all([
-          import('@aztec/bb.js')
-        ]);
-        const programBytecode = 'H4sIAAAAAAAA/9VUSw7CIBAF+lV3noTpQBl2XkUivf8JjDSlEdGVpYu+ZDIvECbvDQOcLbiEaNk3RMy3mOU2QFoL5aiUN4MHhLscrCMtlXYjAYEm/RgI0ZMiY5010oJCD5O2OMViVTldck/PvKDn+iCeRUHPzU6eeeZ5q87uf52YL8zariHqTOszcp5wkfAu8vVcH+IU4syWN16zT4jCPWgLzlBf8N554r3NZmDuQRX3G/bu9a//cMUL4gkRrjgFAAA=';
-        const backend = new UltraHonkBackend(programBytecode);
+      const [{ UltraHonkBackend } ] = await Promise.all([
+        import('@aztec/bb.js')
+      ]);
+      const programBytecode = 'H4sIAAAAAAAA/9VUSw7CIBAF+lV3noTpQBl2XkUivf8JjDSlEdGVpYu+ZDIvECbvDQOcLbiEaNk3RMy3mOU2QFoL5aiUN4MHhLscrCMtlXYjAYEm/RgI0ZMiY5010oJCD5O2OMViVTldck/PvKDn+iCeRUHPzU6eeeZ5q87uf52YL8zariHqTOszcp5wkfAu8vVcH+IU4syWN16zT4jCPWgLzlBf8N554r3NZmDuQRX3G/bu9a//cMUL4gkRrjgFAAA=';
+      const backend = new UltraHonkBackend(programBytecode);
 
-        setBackend(backend);
-        setReady(true);
-      };
+      setBackend(backend);
+      setReady(true);
+    };
   
-      init();
+    init();
   }, []);
 
   if (!ready) return <div>Loading Noir verifier...</div>;
