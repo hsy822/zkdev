@@ -8,25 +8,28 @@ export default function PxeDashboard() {
   const [logs, setLogs] = useState<any[]>([]);
   const [ready, setReady] = useState(false);
 
+  const connectToPXE = async () => {
+    setStatus('connecting');
+    try {
+      const pxe = await createPXEClient('http://localhost:8080');
+      const blockNumber = await pxe.getBlockNumber();
+      const info = await pxe.getPXEInfo();
+      const publicLogs = await pxe.getPublicLogs({ fromBlock: 0, toBlock: blockNumber });
+
+      setPxeInfo(info);
+      setLogs(publicLogs.logs ?? []);
+      setStatus('connected');
+      setReady(true);
+    } catch (e) {
+      console.error(e);
+      setStatus('error');
+    }
+  };
+
   useEffect(() => {
-    const connectToPXE = async () => {
-      setStatus('connecting');
-      try {
-        const pxe = await createPXEClient('http://localhost:8080');
-        const blockNumber = await pxe.getBlockNumber();
-        const info = await pxe.getPXEInfo();
-        const publicLogs = await pxe.getPublicLogs({ fromBlock: 0, toBlock: blockNumber });
-  
-        setPxeInfo(info);
-        setLogs(publicLogs.logs ?? []);
-        setStatus('connected');
-        setReady(true);
-      } catch (e) {
-        console.error(e);
-        setStatus('error');
-      }
-    };
-    connectToPXE()
+    if (typeof window !== 'undefined') {
+      connectToPXE();
+    }
   }, []);
 
   if (!ready) return <div style={{ textAlign: 'center' }}>🕓 Loading PXE dashboard...</div>;
