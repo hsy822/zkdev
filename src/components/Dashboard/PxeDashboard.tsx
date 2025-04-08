@@ -26,12 +26,6 @@ export default function PxeDashboard() {
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      connectToPXE();
-    }
-  }, []);
-
   if (!ready) return <div style={{ textAlign: 'center' }}>🕓 Loading PXE dashboard...</div>;
 
   const sectionStyle = {
