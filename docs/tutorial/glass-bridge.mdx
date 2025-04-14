@@ -8,11 +8,25 @@ import ProofVerifierWrapper from '@site/src/components/ProofVerifierWrapper';
 
 # Glass Bridge With Noir
 
-This document introduces a simple game that helps you understand and practice Zero-Knowledge Proofs (ZK) using Noir circuits. The glass bridge game below allows you to experience ZK proof generation and verification directly in your browser.
+## 🎮 Try Zero-Knowledge Proofs — interactively!
+
+This mini-game demonstrates how ZK proofs work in a fun, visual way. Click tiles to cross the bridge and generate a zero-knowledge proof without revealing the correct path.
+
+Start playing below:
+
+<GlassBridgeGame />
 
 ---
 
-## 1. What Does This Game Prove?
+## ✅ Verify Your Proof Here
+
+Once you make it across the bridge, copy your `proof` and `public inputs`, and paste them below to verify.
+
+<ProofVerifierWrapper />
+
+---
+
+## What Does This Game Prove?
 
 Players must cross a glass bridge by following a randomly generated correct path.
 
@@ -37,7 +51,7 @@ This Noir circuit verifies two conditions:
 
 ---
 
-## 2. Key Points
+## Key Points
 
 - The server has **no knowledge of the correct answer**.  
   The `secret_path` exists **only in the user's browser**.
@@ -49,14 +63,6 @@ This is the essence of Zero-Knowledge Proofs:
 > **"You don’t need to know the answer to verify that someone got it right!"**
 
 ---
-
-## 3. Start the Game!  
-🖱 Click the tiles to try crossing the bridge.
-
-💡 All proofs are generated **locally in the browser** and are never exposed.
-
-
-<GlassBridgeGame />
 
 ## 4. If You Make It Across...
 
@@ -83,16 +89,14 @@ This proof certifies that the player followed the correct path — without revea
 
 ---
 
-## 5. Verify the Proof
-
-After completing the game, the player can copy the `proof` and `public_inputs`, and submit them to a verifier.
+## How the Proof is Verified
 
 The verifier does **not** know the correct path but can still confirm the proof is valid.
 
 ```js
 const verified = await backend.verifyProof({ proof: proofBytes, publicInputs });
 ```
-<ProofVerifierWrapper />
+
 💡 If verification succeeds, it proves the player truly followed the correct path — **without revealing what it was**!
 
 ---
