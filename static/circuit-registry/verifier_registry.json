@@ -1,0 +1,20 @@
+{
+  "group-membership": {
+    "circuit_id": "group-membership",
+    "version": "CIP-001",
+    "description": "Zero-knowledge proof of inclusion in a Merkle group",
+    "public_inputs": [
+      "root"
+    ],
+    "chains": {
+      "anvil": {
+        "evm_address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        "deployed_at": "2025-05-01T06:24:51.604Z"
+      },
+      "starknet-devnet": {
+        "starknet_class_hash": "0x062c8dbbfb5e15afd17b8cc943ad1b6858987c041a18243d93c27615495e5177",
+        "deployed_at": "2025-05-01T06:24:51.609Z"
+      }
+    }
+  }
+}

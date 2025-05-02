@@ -17,22 +17,31 @@ const sidebars: SidebarsConfig = {
       items: ['tutorial/authwit', 'tutorial/glass-bridge'],
     },
   ],
-  boardSidebar: [
+  proofportSidebar: [
     {
       type: 'category',
-      label: 'Dashboard',
+      label: 'Proofport',
       collapsed: false,
-      items: ['dashboard/PXE'],
+      items: ['proofport/hello'],
     },
   ],
-  stakingSidebar: [
+  // boardSidebar: [
+  //   {
+  //     type: 'category',
+  //     label: 'Dashboard',
+  //     collapsed: false,
+  //     items: ['dashboard/PXE'],
+  //   },
+  // ],
+  validatingSidebar: [
     {
       type: 'category',
-      label: 'Staking Log',
+      label: 'Validating Log',
       collapsed: false,
-      items: ['node/staking-log'],
+      items: ['node/validating-log'],
     },
   ],
+  
 };
 
 export default sidebars;

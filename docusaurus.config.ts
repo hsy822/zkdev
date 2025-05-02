@@ -96,16 +96,23 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'boardSidebar', 
+          sidebarId: 'validatingSidebar', 
           position: 'left',
-          label: 'Dashboard',
+          label: 'Validating Log',
         },
         {
           type: 'docSidebar',
-          sidebarId: 'stakingSidebar', 
+          sidebarId: 'proofportSidebar', 
           position: 'left',
-          label: 'Staking Log',
+          label: 'Proofport',
         },
+        // {
+        //   type: 'docSidebar',
+        //   sidebarId: 'boardSidebar', 
+        //   position: 'left',
+        //   label: 'Dashboard',
+        // },
+        
         
       ],
     },
