@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Noir } from "@noir-lang/noir_js";
-import { UltraHonkBackend } from "@aztec/bb.js";
+// import { Noir } from "@noir-lang/noir_js";
+// import { UltraHonkBackend } from "@aztec/bb.js";
 
 interface CircuitMeta {
   circuit_id: string;
@@ -48,64 +48,64 @@ export default function Proofport() {
     }, [circuitId]);
   
     const handleGenerateProof = async () => {
-      setLoading(true);
-      try {
-        setStatus("📦 Loading circuit...");
-        const circuit = await fetch(`/circuits/${circuitId}.json`).then(r => r.json());
-        const noir = new Noir(circuit);
-        const backend = new UltraHonkBackend(circuit.bytecode);
+      // setLoading(true);
+      // try {
+      //   setStatus("📦 Loading circuit...");
+      //   const circuit = await fetch(`/circuits/${circuitId}.json`).then(r => r.json());
+      //   const noir = new Noir(circuit);
+      //   const backend = new UltraHonkBackend(circuit.bytecode);
   
-        setStatus("🧠 Executing circuit...");
-        // Prepare inputs as BigInt or string per Noir.js API
-        const leaf = BigInt(leafParam);
-        const index = BigInt(indexParam);
-        // let hashpath: bigint[] = rawPath.map(h => BigInt(h));
+      //   setStatus("🧠 Executing circuit...");
+      //   // Prepare inputs as BigInt or string per Noir.js API
+      //   const leaf = BigInt(leafParam);
+      //   const index = BigInt(indexParam);
+      //   // let hashpath: bigint[] = rawPath.map(h => BigInt(h));
   
-        // decode raw hex strings:
-        const rawLeaf     = BigInt(leafParam)   % FIELD_MODULUS;
-        const rawIndex    = BigInt(indexParam);            // index is small, no need mod
-        const rawRoot     = BigInt(rootParam)   % FIELD_MODULUS;
-        let   rawHashpath = JSON.parse(decodeURIComponent(hashpathParam)) as string[];
+      //   // decode raw hex strings:
+      //   const rawLeaf     = BigInt(leafParam)   % FIELD_MODULUS;
+      //   const rawIndex    = BigInt(indexParam);            // index is small, no need mod
+      //   const rawRoot     = BigInt(rootParam)   % FIELD_MODULUS;
+      //   let   rawHashpath = JSON.parse(decodeURIComponent(hashpathParam)) as string[];
 
-        // hex → BigInt → mod field → pad/truncate → toString()
-        let hashpath: bigint[] = rawHashpath.map(h =>
-          (BigInt(h) % FIELD_MODULUS)
-        );
-        // pad/truncate to circuit’s fixed length
-        while (hashpath.length < 8) hashpath.push(0n);
-        if (hashpath.length > 8) hashpath = hashpath.slice(0, 8);
+      //   // hex → BigInt → mod field → pad/truncate → toString()
+      //   let hashpath: bigint[] = rawHashpath.map(h =>
+      //     (BigInt(h) % FIELD_MODULUS)
+      //   );
+      //   // pad/truncate to circuit’s fixed length
+      //   while (hashpath.length < 8) hashpath.push(0n);
+      //   if (hashpath.length > 8) hashpath = hashpath.slice(0, 8);
 
-        const inputs = {
-          leaf:  rawLeaf.toString(),
-          index: rawIndex.toString(),
-          hashpath: hashpath.map(h => h.toString()),
-          root:  rawRoot.toString(),
-        };
+      //   const inputs = {
+      //     leaf:  rawLeaf.toString(),
+      //     index: rawIndex.toString(),
+      //     hashpath: hashpath.map(h => h.toString()),
+      //     root:  rawRoot.toString(),
+      //   };
         
-        console.log("🧾 Inputs to Noir:", inputs);
+      //   console.log("🧾 Inputs to Noir:", inputs);
   
-        const { witness } = await noir.execute(inputs);
-        setStatus("🛠 Generating proof...");
-        const { proof } = await backend.generateProof(witness);
+      //   const { witness } = await noir.execute(inputs);
+      //   setStatus("🛠 Generating proof...");
+      //   const { proof } = await backend.generateProof(witness);
   
-        // Send proof back to opener window
-        window.opener.postMessage(
-          {
-            proof,
-            publicInputs: { root: rootParam },
-            circuitId,
-            issued_at: Date.now(),
-          },
-          "*"
-        );
+      //   // Send proof back to opener window
+      //   window.opener.postMessage(
+      //     {
+      //       proof,
+      //       publicInputs: { root: rootParam },
+      //       circuitId,
+      //       issued_at: Date.now(),
+      //     },
+      //     "*"
+      //   );
   
-        setStatus("✅ Proof generated and sent!");
-      } catch (err: any) {
-        console.error("🚨 Error during proof generation:", err);
-        setStatus(`❌ ${err.message}`);
-      } finally {
-        setLoading(false);
-      }
+      //   setStatus("✅ Proof generated and sent!");
+      // } catch (err: any) {
+      //   console.error("🚨 Error during proof generation:", err);
+      //   setStatus(`❌ ${err.message}`);
+      // } finally {
+      //   setLoading(false);
+      // }
     };  
 
   return (
