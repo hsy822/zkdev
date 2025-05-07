@@ -28,3 +28,186 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.zk-container {
+  max-width: 640px;
+  margin: 2rem auto;
+  background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
+  border-radius: 12px;
+  padding: 2rem;
+  color: #e0ffe0;
+  font-family: 'Fira Code', monospace;
+  box-shadow: 0 0 24px rgba(0, 255, 160, 0.2);
+  border: 1px solid rgba(0, 255, 160, 0.2);
+}
+
+.zk-error {
+  color: #ff6666;
+  margin-bottom: 1rem;
+}
+
+.zk-meta {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.zk-progress-bar {
+  height: 6px;
+  width: 100%;
+  background: #333;
+  border-radius: 4px;
+  margin-bottom: 1.2rem;
+  overflow: hidden;
+}
+
+.zk-progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, #00ffaa, #22ffcc);
+  transition: width 0.5s ease;
+}
+
+.zk-step-list {
+  margin-bottom: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.zk-step {
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+.zk-step-current {
+  color: #00ffaa;
+  font-weight: bold;
+}
+
+.zk-step-past {
+  color: #666;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.zk-step-future {
+  color: #333;
+  opacity: 0.4;
+}
+
+.zk-subtext {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.zk-button {
+  margin-top: 1rem;
+  background: #00ffaa;
+  color: #000;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.zk-button:hover {
+  background: #33ffbb;
+}
+
+.zk-back-button {
+  margin-left: 1.5rem;
+  background: #fff;
+  color: #000;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+body {
+  background: linear-gradient(135deg, #f0f4ff, #e4fbf7);
+  font-family: 'JetBrains Mono', 'Inter', sans-serif;
+}
+
+.zk-glass-card {
+  max-width: 680px;
+  margin: 3rem auto;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #1a1a1a;
+}
+
+.zk-glass-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #007aff;
+}
+
+.zk-glass-card p {
+  color: #444;
+}
+
+.zk-button {
+  background: #00bfa6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.zk-button:hover {
+  background: #00a08b;
+}
+
+.zk-progress-bar {
+  height: 6px;
+  width: 100%;
+  background: #eaeaea;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+}
+
+.zk-progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, #00bfa6, #00e0c0);
+  transition: width 0.5s ease;
+}
+
+.zk-step-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.zk-step {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.zk-step-current {
+  color: #00bfa6;
+  font-weight: 600;
+}
+
+.zk-step-past {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.zk-step-future {
+  color: #ccc;
+}

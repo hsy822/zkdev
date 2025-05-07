@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { poseidon2 } from "poseidon-lite";
 import { init as garagaInit, getHonkCallData } from "garaga";
 import { connect as connectStarknet } from "starknetkit";
+import { RpcProvider, Contract } from "starknet";
 
 interface CircuitMeta {
   circuit_id: string;
@@ -10,7 +11,7 @@ interface CircuitMeta {
   public_inputs: string[];
   metadata: any;
 }
-
+// cip-001-group-membership
 const MAX_DEPTH = 4;
 
 function hash2(a: bigint, b: bigint): bigint {
@@ -23,7 +24,7 @@ function toHex(n: bigint): string {
 
 async function getWalletAddress(chainId: string): Promise<string> {
   if (chainId.startsWith("starknet")) {
-    const starknet = await connectStarknet({ modalMode: "canAsk" });
+    const starknet = await connectStarknet({ modalMode: "alwaysAsk" });
     if (!starknet) throw new Error("Starknet wallet not available");
     return starknet.connectorData.account;
   }
@@ -42,11 +43,16 @@ export default function Proofport() {
   const [meta, setMeta] = useState<CircuitMeta | null>(null);
   const [showBackButton, setShowBackButton] = useState(false);
   const [whitelist, setWhitelist] = useState<string[]>([]);
+  const [threshold, setThreshold] = useState<string>("");
+  const [nonce, setNonce] = useState<string>("");
+  const [issuedAt, setIssuedAt] = useState(0);
+
   const [currentStep, setCurrentStep] = useState<string | null>(null);
 
   const params = new URLSearchParams(window.location.search);
   const circuitId = params.get("circuit_id")!;
   const chainId = params.get("chain_id")!;
+  const passedInRoot = params.get("root")!;
 
   const steps = [
     { key: "connect", label: "Connecting wallet" },
@@ -56,15 +62,27 @@ export default function Proofport() {
     { key: "calldata", label: "Preparing Starknet calldata" },
     { key: "complete", label: "Proof ready" },
   ];
+  
+  useEffect(() => {
+    if ((window as any).ethereum) {
+      (window as any).ethereum.on("accountsChanged", () => {
+        window.location.reload();
+      });
+    }
+  }, []);
 
   useEffect(() => {
     try {
       const data = JSON.parse(window.name);
       if (Array.isArray(data.whitelist)) {
+        // group-membership
         setWhitelist(data.whitelist);
       } else {
-        throw new Error("Whitelist not found in window.name");
+        // eth-balance
+        setThreshold(data.threshold);
       }
+      setNonce(data.nonce);
+      setIssuedAt(data.issued_at);
     } catch {
       setError("Failed to load whitelist from dApp.");
     }
@@ -88,11 +106,14 @@ export default function Proofport() {
     })();
   }, [circuitId]);
 
-  const handleGenerateProof = async () => {
+  // group-membership
+  const handleGenerateProofForGroupMembership = async () => {
     try {
       setLoading(true);
       setCurrentStep("connect");
       const addressStr = await getWalletAddress(chainId);
+      if (!addressStr) throw new Error("No wallet address retrieved");
+      
       const address = BigInt(addressStr);
       const identityCommitment = poseidon2([address, 0n]);
 
@@ -112,7 +133,11 @@ export default function Proofport() {
         tree.push(next);
       }
 
-      const root = tree[MAX_DEPTH][0];
+      const computedRoot = tree[MAX_DEPTH][0];
+
+      // Sanity check: reject if whitelist Merkle root doesn't match the expected root from dApp
+      if (toHex(computedRoot) !== passedInRoot) throw new Error("Root mismatch");
+
       const siblings: bigint[] = [];
       let i = index;
       for (let d = 0; d < MAX_DEPTH; d++) {
@@ -137,7 +162,7 @@ export default function Proofport() {
         merkle_proof_length: MAX_DEPTH.toString(),
         merkle_proof_indices,
         merkle_proof_siblings: siblings.map((x) => x.toString()),
-        root: root.toString(),
+        root: computedRoot.toString(),
       };
 
       setCurrentStep("execute");
@@ -149,7 +174,7 @@ export default function Proofport() {
 
       const rawProof = proof.proof;
       const proofHex = "0x" + Buffer.from(rawProof).toString("hex");
-      const formattedRoot = toHex(BigInt(proof.publicInputs[0]));
+      const formattedPublicInputs = toHex(BigInt(proof.publicInputs[0]));
 
       let calldata: any = null;
       if (chainId.startsWith("starknet")) {
@@ -164,10 +189,118 @@ export default function Proofport() {
       window.opener.postMessage(
         {
           proof: proofHex,
-          publicInputs: { root: formattedRoot },
+          publicInputs: { root: formattedPublicInputs },
           circuitId,
           chainId,
-          issued_at: Date.now(),
+          issued_at: issuedAt,
+          nonce,
+          ...(calldata && { calldata }),
+        },
+        "*"
+      );
+
+      setCurrentStep("complete");
+      setShowBackButton(true);
+    } catch (err: any) {
+      console.error("Error during proof generation:", err);
+      setError(`❌ ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // eth-balance
+  const handleGenerateProofForEthBalance = async () => {
+    try {
+      setLoading(true);
+      setCurrentStep("connect");
+      const address = await getWalletAddress(chainId);
+      if (!address) throw new Error("No wallet address retrieved");
+      let sepoliaRpc = "";
+      let inputs = {};
+      if (chainId.startsWith("starknet")) {
+        sepoliaRpc = "https://starknet-sepolia.infura.io/v3/2622f26051844e03b6a73b23d6990825";
+        const provider = new RpcProvider({nodeUrl: sepoliaRpc });
+        const ETH_CONTRACT = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
+        const ABI = [
+          {
+            "type": "function",
+            "name": "balanceOf",
+            "inputs": [{ "name": "account", "type": "felt" }],
+            "outputs": [{ "name": "balance", "type": "felt" }],
+            "state_mutability": "view"
+          }
+        ];
+        const eth = new Contract(ABI, ETH_CONTRACT, provider);
+        const { balance } = await eth.balanceOf(address);
+        console.log(balance)
+        const val = BigInt(balance); // hex -> bigint
+        inputs = {
+          balance: val.toString(),
+          threshold: BigInt(threshold || 0).toString(),
+        }
+      } else {
+        sepoliaRpc = "https://sepolia.infura.io/v3/2622f26051844e03b6a73b23d6990825";
+        const res = await fetch(sepoliaRpc, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            id: 1,
+            method: "eth_getBalance",
+            params: [address, "latest"],
+          }),
+        });
+      
+        const { result } = await res.json();
+      
+        if (!result) throw new Error("Failed to fetch balance from Sepolia");
+      
+        const balance = BigInt(result); // hex -> bigint
+      
+        inputs = {
+          balance: balance.toString(),
+          threshold: BigInt(threshold || 0).toString(),
+        }
+      }
+
+      setCurrentStep("load");
+      const [{ Noir }, { UltraHonkBackend }] = await Promise.all([
+        import("@noir-lang/noir_js"),
+        import("@aztec/bb.js"),
+      ]);
+      const noir = new Noir(meta!.metadata);
+      const backend = new UltraHonkBackend(meta!.metadata.bytecode, { threads: 2 });
+
+      setCurrentStep("execute");
+      const { witness } = await noir.execute(inputs);
+
+      setCurrentStep("prove");
+      const proof = await backend.generateProof(witness, { keccak: true });
+      backend.destroy();
+
+      const rawProof = proof.proof;
+      const proofHex = "0x" + Buffer.from(rawProof).toString("hex");
+      const formattedPublicInputs = toHex(BigInt(proof.publicInputs[0]));
+
+      let calldata: any = null;
+      if (chainId.startsWith("starknet")) {
+        setCurrentStep("calldata");
+        await garagaInit();
+        const vkRes = await fetch(`/vk/vk_${circuitId}.bin`);
+        const vkBuffer = await vkRes.arrayBuffer();
+        const vk = new Uint8Array(vkBuffer);
+        calldata = getHonkCallData(rawProof, flattenFieldsAsArray(proof.publicInputs), vk, 0);
+      }
+
+      window.opener.postMessage(
+        {
+          proof: proofHex,
+          publicInputs: { threshold: formattedPublicInputs },
+          circuitId,
+          chainId,
+          issued_at: issuedAt,
+          nonce,
           ...(calldata && { calldata }),
         },
         "*"
@@ -184,107 +317,57 @@ export default function Proofport() {
   };
 
   return (
-    <div style={{
-      maxWidth: "640px",
-      margin: "2rem auto",
-      background: "#111",
-      padding: "2rem",
-      borderRadius: "12px",
-      color: "#f0f0f0",
-      fontFamily: "monospace",
-      boxShadow: "0 0 16px rgba(0,255,160,0.2)",
-    }}>
-      {error && <p style={{ color: "#f66", marginBottom: "1rem" }}>{error}</p>}
-
+    <div className="zk-glass-card">
+      {error && <p className="zk-error">{error}</p>}
+  
       {meta && (
-        <div style={{ marginBottom: "1.5rem", lineHeight: 1.6 }}>
+        <div className="zk-meta">
           <p><strong>Circuit:</strong> {meta.circuit_id}</p>
           <p><strong>Version:</strong> {meta.version}</p>
           <p><strong>Description:</strong> {meta.description}</p>
           <p><strong>Required Inputs:</strong> {meta.public_inputs.join(", ")}</p>
         </div>
       )}
-
-      <div style={{
-        height: "6px",
-        width: "100%",
-        background: "#333",
-        borderRadius: "4px",
-        marginBottom: "1.2rem",
-        overflow: "hidden"
-      }}>
-        <div style={{
-          height: "100%",
-          width: `${((steps.findIndex(s => s.key === currentStep) + 1) / steps.length) * 100}%`,
-          background: "#00ffaa",
-          transition: "width 0.5s ease"
-        }} />
+  
+      <div className="zk-progress-bar">
+        <div
+          className="zk-progress-fill"
+          style={{ width: `${((steps.findIndex(s => s.key === currentStep) + 1) / steps.length) * 100}%` }}
+        />
       </div>
-
-      <ul style={{ marginBottom: "1.5rem", padding: 0, listStyle: "none" }}>
+  
+      <ul className="zk-step-list">
         {steps.map(({ key, label }) => {
           const currentIndex = steps.findIndex(s => s.key === currentStep);
           const stepIndex = steps.findIndex(s => s.key === key);
           const isPast = stepIndex < currentIndex;
           const isNow = stepIndex === currentIndex;
-
-          const style = {
-            color: isNow ? "#00ffaa" : isPast ? "#888" : "#444",
-            textDecoration: isPast ? "line-through" : "none",
-            fontWeight: isNow ? "bold" : "normal",
-            opacity: isNow ? 1 : isPast ? 0.7 : 0.4,
-            transition: "all 0.3s ease",
-            marginBottom: "4px"
-          };
-
-          return <li key={key} style={style}>• {label}</li>;
+  
+          const stepClass = isNow ? "zk-step-current" : isPast ? "zk-step-past" : "zk-step-future";
+          return <li key={key} className={`zk-step ${stepClass}`}>• {label}</li>;
         })}
       </ul>
-
+  
       {!currentStep && (
-        <p style={{ fontSize: "0.9rem", color: "#888" }}>
-          Click below to generate your zero-knowledge proof.
-        </p>
+        <p className="zk-subtext">Click below to generate your zero-knowledge proof.</p>
       )}
-
+  
       <button
         disabled={loading}
-        onClick={handleGenerateProof}
-        style={{
-          marginTop: "1rem",
-          background: "#00ffaa",
-          color: "#000",
-          padding: "0.7rem 1.2rem",
-          borderRadius: "8px",
-          fontWeight: "bold",
-          fontSize: "1rem",
-          border: "none",
-          cursor: "pointer",
-        }}
+        onClick={circuitId === "group-membership" ? handleGenerateProofForGroupMembership : handleGenerateProofForEthBalance}
+        className="zk-button"
       >
         {loading ? "Generating..." : "Connect & Prove"}
       </button>
-
+  
       {showBackButton && (
-        <button
-          onClick={() => window.close()}
-          style={{
-            marginLeft: "1.5rem",
-            background: "#fff",
-            color: "#000",
-            padding: "0.6rem 1rem",
-            borderRadius: "8px",
-            fontWeight: "bold",
-            fontSize: "1rem",
-            border: "1px solid #ccc",
-            cursor: "pointer",
-          }}
-        >
+        <button className="zk-back-button" onClick={() => window.close()}>
           Back to DApp
         </button>
       )}
     </div>
   );
+  
 }
 
 function flattenFieldsAsArray(fields: string[]): Uint8Array {
