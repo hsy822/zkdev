@@ -76,6 +76,8 @@ export default function Proofport() {
       // if (event.origin !== "https://proofport-demo-dapp.vercel.app") return;
   
       const data = event.data;
+      console.log(data);
+
       if (Array.isArray(data.whitelist)) {
         setWhitelist(data.whitelist);
       } else {
@@ -131,22 +133,28 @@ export default function Proofport() {
       setLoading(true);
       setCurrentStep("connect");
       const addressStr = await getWalletAddress(chainId);
+      console.log("Connected wallet address:", addressStr);
       if (!addressStr) throw new Error("No wallet address retrieved");
       
       const address = BigInt(addressStr);
       const identityCommitment = poseidon2([address, 0n]);
+      console.log("Identity commitment:", identityCommitment.toString());
 
-      const normalizedLeaves = whitelist.map((v) => poseidon2([BigInt(v), 0n]));
+      console.log("Received whitelist:", whitelist);
+      
+      const normalizedLeaves = whitelist.map((v) => {
+        const leaf = poseidon2([BigInt(v), 0n]);
+        console.log("Leaf from:", v, "=>", leaf.toString());
+        return leaf;
+      });
+      const normalizedLeaves1 = whitelist.map((v) => {
+        const leaf = poseidon2([BigInt(v.toLowerCase()), 0n]);
+        console.log("Leaf from:", v, "=>", leaf.toString());
+        return leaf;
+      });
+      // const normalizedLeaves = whitelist.map((v) => poseidon2([BigInt(v.toLowerCase()), 0n]));
       const hashedLeaves = whitelist.map((v) => poseidon2([BigInt(v), 0n]));
       const index = normalizedLeaves.findIndex((v) => v.toString() === identityCommitment.toString());
-
-
-      console.log("Identity Commitment:", identityCommitment.toString());
-      console.log("Normalized Leaves:");
-      normalizedLeaves.forEach((leaf, i) => {
-        console.log(i, leaf.toString());
-      });
-      
       if (index === -1) throw new Error("Address not in allowlist");
 
       while (hashedLeaves.length < 2 ** MAX_DEPTH) hashedLeaves.push(0n);
