@@ -136,9 +136,17 @@ export default function Proofport() {
       const address = BigInt(addressStr);
       const identityCommitment = poseidon2([address, 0n]);
 
-      const normalizedLeaves = whitelist.map((v) => poseidon2([BigInt(v.toLowerCase()), 0n]));
+      const normalizedLeaves = whitelist.map((v) => poseidon2([BigInt(v), 0n]));
       const hashedLeaves = whitelist.map((v) => poseidon2([BigInt(v), 0n]));
       const index = normalizedLeaves.findIndex((v) => v.toString() === identityCommitment.toString());
+
+
+      console.log("Identity Commitment:", identityCommitment.toString());
+      console.log("Normalized Leaves:");
+      normalizedLeaves.forEach((leaf, i) => {
+        console.log(i, leaf.toString());
+      });
+      
       if (index === -1) throw new Error("Address not in allowlist");
 
       while (hashedLeaves.length < 2 ** MAX_DEPTH) hashedLeaves.push(0n);
