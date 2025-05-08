@@ -62,22 +62,44 @@ export default function Proofport() {
     { key: "calldata", label: "Preparing Starknet calldata" },
     { key: "complete", label: "Proof ready" },
   ];
-  
-  useEffect(() => {
-    if ((window as any).ethereum) {
-      (window as any).ethereum.on("accountsChanged", () => {
-        window.location.reload();
-      });
-    }
-  }, []);
 
-  useEffect(() => {
-    function handleMessage(event: MessageEvent) {
+  if (typeof window !== "undefined" && !window.__proofport_initialized) {
+    window.__proofport_initialized = true;
+  
+    window.addEventListener("message", function earlyMessageListener(event) {
+      console.log("EARLY postMessage received", event.data);
       // if (event.origin !== "https://proofport-demo-dapp.vercel.app") return;
   
       const data = event.data;
-      console.log(data);
-
+      if (!data) return;
+  
+      (window as any).__proofport_initialPayload = data;
+  
+      window.removeEventListener("message", earlyMessageListener);
+    });
+  }
+  
+  useEffect(() => {
+    const data = (window as any).__proofport_initialPayload;
+    if (data) {
+      console.log("Using buffered postMessage:", data);
+  
+      if (Array.isArray(data.whitelist)) {
+        setWhitelist(data.whitelist);
+      } else {
+        setThreshold(data.threshold);
+      }
+      setNonce(data.nonce);
+      setIssuedAt(data.issued_at);
+      return;
+    }
+  
+    // fallback
+    function handleMessage(event: MessageEvent) {
+      // if (event.origin !== "https://proofport-demo-dapp.vercel.app") return;
+      const data = event.data;
+      console.log("Received message late:", data);
+  
       if (Array.isArray(data.whitelist)) {
         setWhitelist(data.whitelist);
       } else {
@@ -90,24 +112,14 @@ export default function Proofport() {
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);
-  
-  // useEffect(() => {
-  //   try {
-  //     const data = JSON.parse(window.name);
-  //     console.log({data})
-  //     if (Array.isArray(data.whitelist)) {
-  //       // group-membership
-  //       setWhitelist(data.whitelist);
-  //     } else {
-  //       // eth-balance
-  //       setThreshold(data.threshold);
-  //     }
-  //     setNonce(data.nonce);
-  //     setIssuedAt(data.issued_at);
-  //   } catch {
-  //     setError("Failed to load whitelist from dApp.");
-  //   }
-  // }, []);
+
+  useEffect(() => {
+    if ((window as any).ethereum) {
+      (window as any).ethereum.on("accountsChanged", () => {
+        window.location.reload();
+      });
+    }
+  }, []);
 
   const REGISTRY_URL = "https://raw.githubusercontent.com/hsy822/proofport/main/packages/registry/verifier_registry.json";
 
