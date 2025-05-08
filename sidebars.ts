@@ -22,7 +22,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Proofport',
       collapsed: false,
-      items: ['proofport/hello'],
+      items: ['proofport/hello', 'proofport/sdk'],
     },
   ],
   // boardSidebar: [
