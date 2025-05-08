@@ -72,22 +72,40 @@ export default function Proofport() {
   }, []);
 
   useEffect(() => {
-    try {
-      const data = JSON.parse(window.name);
-      console.log({data})
+    function handleMessage(event: MessageEvent) {
+      // if (event.origin !== "https://proofport-demo-dapp.vercel.app") return;
+  
+      const data = event.data;
       if (Array.isArray(data.whitelist)) {
-        // group-membership
         setWhitelist(data.whitelist);
       } else {
-        // eth-balance
         setThreshold(data.threshold);
       }
       setNonce(data.nonce);
       setIssuedAt(data.issued_at);
-    } catch {
-      setError("Failed to load whitelist from dApp.");
     }
+  
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
+  
+  // useEffect(() => {
+  //   try {
+  //     const data = JSON.parse(window.name);
+  //     console.log({data})
+  //     if (Array.isArray(data.whitelist)) {
+  //       // group-membership
+  //       setWhitelist(data.whitelist);
+  //     } else {
+  //       // eth-balance
+  //       setThreshold(data.threshold);
+  //     }
+  //     setNonce(data.nonce);
+  //     setIssuedAt(data.issued_at);
+  //   } catch {
+  //     setError("Failed to load whitelist from dApp.");
+  //   }
+  // }, []);
 
   const REGISTRY_URL = "https://raw.githubusercontent.com/hsy822/proofport/main/packages/registry/verifier_registry.json";
 
