@@ -74,6 +74,7 @@ export default function Proofport() {
   useEffect(() => {
     try {
       const data = JSON.parse(window.name);
+      console.log({data})
       if (Array.isArray(data.whitelist)) {
         // group-membership
         setWhitelist(data.whitelist);
